@@ -1,8 +1,9 @@
 #include <stdio.h>
-
-int suma(int a, int b);
+#include "suma.h"
 
 int main() {
-    printf("Pipeline local simulado.\n");
+    printf("=== Pipeline CI Local ===\n");
+    printf("Programa compilado y listo.\n");
+    printf("Ejemplo: %d + %d = %d\n", 10, 5, suma(10, 5));
     return 0;
 }

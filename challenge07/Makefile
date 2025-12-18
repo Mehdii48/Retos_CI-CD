@@ -1,16 +1,28 @@
-CC=gcc
-CFLAGS=-Wall -Wextra -Werror
-TARGET=starter
-TEST_TARGET=test_challenge07
+# Challenge 07 - Estructura simple
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -std=c99
 
-all: $(TARGET)
+# Programa principal
+PROGRAM = programa
 
-$(TARGET): starter.c
-	$(CC) $(CFLAGS) -o $(TARGET) starter.c
+# Pruebas
+TEST = test_runner
 
-test: starter.c test_challenge07.c
-	$(CC) $(CFLAGS) -o $(TEST_TARGET) starter.c test_challenge07.c
-	./$(TEST_TARGET)
+.PHONY: all build test clean
+
+all: build test
+
+build: main.c suma.c suma.h
+	@echo "🔨 Compilando programa..."
+	$(CC) $(CFLAGS) -o $(PROGRAM) main.c suma.c
+	@echo "✅ Programa: $(PROGRAM)"
+
+test: test_challenge07.c suma.c suma.h
+	@echo "🧪 Compilando pruebas..."
+	$(CC) $(CFLAGS) -o $(TEST) test_challenge07.c suma.c
+	@echo "✅ Ejecutando pruebas..."
+	./$(TEST) || (echo "❌ Pruebas fallaron" && exit 1)
 
 clean:
-	rm -f $(TARGET) $(TEST_TARGET)
+	rm -f $(PROGRAM) $(TEST)
+	@echo "🧹 Limpiado"

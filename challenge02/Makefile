@@ -1,16 +1,23 @@
-CC=gcc
-CFLAGS=-Wall -Wextra -Werror
-TARGET=starter
-TEST_TARGET=test_challenge02
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -pedantic -std=c99
+TARGET = calculadora
+TEST_TARGET = test_challenge02
 
 all: $(TARGET)
 
-$(TARGET): starter.c
-	$(CC) $(CFLAGS) -o $(TARGET) starter.c
+$(TARGET): main.c calculadora.c calculadora.h
+	$(CC) $(CFLAGS) -o $(TARGET) main.c calculadora.c
 
-test: starter.c test_challenge02.c
-	$(CC) $(CFLAGS) -o $(TEST_TARGET) starter.c test_challenge02.c
+test: $(TEST_TARGET)
 	./$(TEST_TARGET)
 
+$(TEST_TARGET): test_challenge02.c calculadora.c calculadora.h
+	$(CC) $(CFLAGS) -o $(TEST_TARGET) test_challenge02.c calculadora.c
+
 clean:
-	rm -f $(TARGET) $(TEST_TARGET)
+	rm -f $(TARGET) $(TEST_TARGET) *.o
+
+run: $(TARGET)
+	./$(TARGET)
+
+.PHONY: all test clean run

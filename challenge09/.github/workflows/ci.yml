@@ -1,0 +1,54 @@
+name: CI Challenge 09 - Badges
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v3
+    
+    - name: Mostrar badge en README
+      run: |
+        echo "🛡️  Verificando badge en README..."
+        if grep -q "badge.svg" README.md; then
+          echo "✅ Badge encontrado en README.md"
+          echo "📊 URL del badge:"
+          grep -o 'https://[^)]*badge.svg' README.md
+        else
+          echo "❌ No se encontró badge en README.md"
+          exit 1
+        fi
+    
+    - name: Compilar programa
+      run: |
+        echo "🔨 Compilando..."
+        make build
+        
+    - name: Ejecutar programa
+      run: |
+        echo "🚀 Probando programa..."
+        ./programa
+        
+    - name: Ejecutar pruebas
+      run: |
+        echo "🧪 Ejecutando pruebas unitarias..."
+        make test
+        
+    - name: Verificar estado
+      if: success()
+      run: |
+        echo "🎉 ¡PIPELINE COMPLETADO CON ÉXITO!"
+        echo "✅ El badge se actualizará automáticamente a verde"
+        
+    - name: Notificar fallo
+      if: failure()
+      run: |
+        echo "❌ ¡PIPELINE FALLÓ!"
+        echo "⚠️  El badge se actualizará automáticamente a rojo"
